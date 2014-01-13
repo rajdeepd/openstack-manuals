@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<book xmlns="http://docbook.org/ns/docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:svg="http://www.w3.org/2000/svg"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    version="5.0"
+    xml:id="openstack-image-manual-trunk">
+
+    <title>OpenStack API Samples Guide</title>
+    <?rax title.font.size="28px" subtitle.font.size="28px"?>
+<titleabbrev>VM Image Guide</titleabbrev>
+    <info>
+        <author>
+            <personname>
+                <firstname/>
+                <surname/>
+            </personname>
+            <affiliation>
+                <orgname>OpenStack Foundation</orgname>
+            </affiliation>
+        </author>
+        <copyright>
+            <year>2013</year>
+            <holder>OpenStack Foundation</holder>
+        </copyright>
+        <releaseinfo>havana</releaseinfo>
+        <productname>OpenStack</productname>
+        <pubdate></pubdate>
+        <legalnotice role="cc-by">
+            <annotation>
+                <remark>Remaining licensing details are filled in by
+                    the template.</remark>
+            </annotation>
+        </legalnotice>
+        <abstract>
+            <para>This guide describes how to obtain, create, and
+                modify virtual machine images that are compatible with
+                OpenStack.</para>
+        </abstract>
+        <revhistory>
+            <!-- ... continue addding more revisions here as you change this document using the markup shown below... -->
+            <revision>
+                <date>2013-10-25</date>
+                <revdescription>
+                    <itemizedlist>
+                        <listitem>
+                            <para>Adds information about image formats, properties.</para>
+                        </listitem>
+                    </itemizedlist>
+                </revdescription>
+            </revision>
+            <revision>
+                <date>2013-10-17</date>
+                <revdescription>
+                    <itemizedlist>
+                        <listitem>
+                            <para>Havana release.</para>
+                        </listitem>
+                    </itemizedlist>
+                </revdescription>
+            </revision>
+            <revision>
+                <date>2013-06-04</date>
+                <revdescription>
+                    <itemizedlist>
+                        <listitem>
+                            <para>Updated title for consistency.</para>
+                        </listitem>
+                    </itemizedlist>
+                </revdescription>
+            </revision>
+<revision>
+                <date>2013-05-28</date>
+                <revdescription>
+                    <itemizedlist>
+                        <listitem>
+                            <para>Initial release of this guide.</para>
+                        </listitem>
+                    </itemizedlist>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <!-- Chapters are referred from the book file through these include statements. You can add additional chapters using these types of statements. -->
+    <xi:include href="ch_preface.xml"/>
+    <xi:include href="ch_keystone.xml"/>
+    <xi:include href="ch_neutron.xml"/>
+    <xi:include href="ch_glance.xml"/>
+    <xi:include href="ch_compute.xml"/>
+    <xi:include href="ch_cinder.xml"/>
+    <xi:include href="ch_introduction.xml"/>
+    <xi:include href="../common/app_support.xml"/>
+   </book>

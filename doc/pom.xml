@@ -14,6 +14,7 @@
     <module>glossary</module>
     <module>high-availability-guide</module>
     <module>image-guide</module>
+    <module>python-api-guide</module>
     <module>install-guide</module>
     <module>security-guide</module>
     <module>training-guides</module>
