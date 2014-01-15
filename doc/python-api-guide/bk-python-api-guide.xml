@@ -84,11 +84,13 @@
     </info>
     <!-- Chapters are referred from the book file through these include statements. You can add additional chapters using these types of statements. -->
     <xi:include href="ch_preface.xml"/>
+    <xi:include href="ch_introduction.xml"/>
     <xi:include href="ch_keystone.xml"/>
     <xi:include href="ch_neutron.xml"/>
     <xi:include href="ch_glance.xml"/>
     <xi:include href="ch_compute.xml"/>
     <xi:include href="ch_cinder.xml"/>
-    <xi:include href="ch_introduction.xml"/>
+<!--
     <xi:include href="../common/app_support.xml"/>
+-->
    </book>

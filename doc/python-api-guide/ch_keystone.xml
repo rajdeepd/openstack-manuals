@@ -7,81 +7,161 @@
         <?dbhtml stop-chunking?>
     <para>The simplest way to use Openstack API samples is to run on the same machine where openstack is installed.
         </para>
-        <section xml:id="user">
-            <title>Users</title>
-        <para>CirrOS is a minimal Linux distribution that was designed for use as a test image on
-            clouds such as OpenStack Compute. You can download a CirrOS image in various formats
-            from the <link xlink:href="https://launchpad.net/cirros/+download">CirrOS Launchpad
-                download page</link>.</para>
-            <para>If your deployment uses QEMU or KVM, we recommend using the images in qcow2
-            format. The most recent 64-bit qcow2 image as of this writing is <link
-                xlink:href="http://download.cirros-cloud.net/0.3.1/cirros-0.3.1-x86_64-disk.img"
-                >cirros-0.3.1-x86_64-disk.img</link>
-            <note>
-                <para>In a CirrOS image, the login account is <literal>cirros</literal>. The
-                    password is <literal>cubswin:)</literal></para>
-            </note></para>
-        </section>
+        <section xml:id="list_roles">
+            <title>List Roles</title>
+        <para>
+                The following program lists all the roles available in the OpenStack</para>
+        <programlisting language="python">
+import keystoneclient.v2_0.client as ksclient
+from credentials import get_credentials
+from credentials import get_credentials_tenant
 
-        <section xml:id="tenants">
-            <title>Tenants</title>
-            <para>Canonical maintains an <link xlink:href="http://cloud-images.ubuntu.com/">official
-                set of Ubuntu-based images</link>.</para>
-        <para>Images are arranged by Ubuntu release, and by image release date, with "current" being
-            the most recent. For example, the page that contains the most recently built image for
-            Ubuntu 12.04 "Precise Pangolin" is <link
-                xlink:href="http://cloud-images.ubuntu.com/precise/current/"
-                >http://cloud-images.ubuntu.com/precise/current/</link>. Scroll to the bottom of the
-            page for links to images that can be downloaded directly.</para>
-            <para>If your deployment uses QEMU or KVM, we recommend using the images in qcow2
-            format. The most recent version of the 64-bit QCOW2 image for Ubuntu 12.04 is <link
-                xlink:href="http://uec-images.ubuntu.com/precise/current/precise-server-cloudimg-amd64-disk1.img"
-                >precise-server-cloudimg-amd64-disk1.img</link>.<note>
-                <para>In an Ubuntu cloud image, the login account is
-                    <literal>ubuntu</literal>.</para>
-            </note></para>
-        </section>
-        <section xml:id="roles">
-            <title>Roles</title>
-            <para>
-              Red Hat maintains an official Red Hat Enterprise Linux 6 cloud
-              image. A valid Red Hat Enterprise Linux 6 subscription is required
-              to download the <link
-                  xlink:href="https://rhn.redhat.com/rhn/software/channel/downloads/Download.do?cid=16952"
-                >KVM Guest Image</link>.
-            </para>
-            <para>
-              A <link
-              xlink:href="https://rhn.redhat.com/rhn/software/channel/downloads/Download.do?cid=10486"
-              >boot.iso</link> image is also available. This is the same as the
-              <literal>boot.iso</literal> file provided on the Red Hat
-              Enterprise Linux installation DVD. It is a minimal image suitable
-              for kickstarting operating system installation over a network.
-            </para>
-        </section>
-    <section xml:id="services">
-        <title>Services</title>
-        <para>The Fedora project maintains a list of official cloud images at
-              <link xlink:href="http://cloud.fedoraproject.org/" />. The images
-              include the <systemitem class="process">cloud-init</systemitem>
-              utility to support key and user data injection. The default user
-              name is <systemitem class="username">fedora</systemitem>.
+credentials = get_credentials()
+try:
+    keystone = ksclient.Client(**credentials)
+    tenants_list = keystone.tenants.list()
+    for t in tenants_list:
+        print t.name
+        credentials_tenant = get_credentials_tenant(t.name)
+        try:
+            keystone_tenant = ksclient.Client(**credentials_tenant)
+            roles = keystone_tenant.roles.list()
+            for r in roles:
+                print r
+        except Exception as inst:
+            print 'Exception %s' % inst
+            break
+finally:
+    print "Execution Completed." </programlisting>
+	<para>
+	The following is the output of the script
         </para>
-    </section>
-    <section xml:id="projects">
-        <title>Projects</title>
-        <para>SUSE does not provide openSUSE or SUSE Linux Enterprise
-            Server (SLES) images for direct download. Instead, they
-            provide a web-based tool called <link
-                xlink:href="http://susestudio.com">SUSE Studio</link>
-            that you can use to build openSUSE and SLES images.</para>
+        <screen>
+		TBD
+	</screen> 
+        </section>
 
-        <para>For example, Christian Berendt used <link xlink:href="http://www.oensuse.org">openSUSE</link> to create
-              <link xlink:href="http://susestudio.com/a/YRUrwO/testing-instance-for-openstack-opensuse-12-3">
-              a test openSUSE 12.3 image</link>.</para>
+        <section xml:id="create_role">
+            <title>Create Role</title>
+        <para>
+                The following program creates a role.</para>
+        <programlisting language="python">
+import keystoneclient.v2_0.client as ksclient
+from credentials import get_credentials
+
+credentials = get_credentials()
+try:
+    keystone = ksclient.Client(**credentials)
+    print keystone.auth_url
+    #Looks like a potential bug
+    if keystone.auth_url != keystone.management_url:
+        keystone.management_url = keystone.auth_url
+
+    role_name = "role1"
+    role_exists = False
+    roles = keystone.roles.list()
+    for r in roles:
+        if r.name == role_name:
+            role_exists = True
+
+    if role_exists:
+        print "%s already exists" % role_name
+
+    else:
+        user_role = keystone.roles.create(role_name)
+        print "Created role %s" % role_name
+finally:
+    print "Execution Completed."
+        </programlisting>
+	<para>
+	The following is the output of the script
+        </para>
+        <screen>
+		TBD
+	</screen> 
     </section>
-    <section xml:id="v3-keystone1-extensions">
-        <title>V3 Extensions</title>
-        <para>As of this writing, we are not aware of other distributions that provide images for download.</para>
+
+        <section xml:id="list_tenants">
+            <title>List Tenants</title>
+        <para>
+                The following program lists all the tenants</para>
+        <programlisting language="python">
+import keystoneclient.v2_0.client as ksclient
+from credentials import get_credentials
+
+credentials = get_credentials()
+try:
+    keystone = ksclient.Client(**credentials)
+    print keystone.auth_url
+    #Looks like a potential bug
+    if keystone.auth_url != keystone.management_url:
+        keystone.management_url = keystone.auth_url
+
+    tenants_list = keystone.tenants.list()
+    for t in tenants_list:
+        print t
+
+finally:
+    print "Execution Completed."
+        </programlisting>
+	<para>
+	The following is the output of the script
+        </para>
+        <screen>
+		TBD
+	</screen> 
     </section>
-    </chapter>
+
+        <section xml:id="create_tenant">
+            <title>Create Tenant</title>
+        <para>
+                The following program creates a tenant</para>
+        <programlisting language="python">
+import keystoneclient.v2_0.client as ksclient
+from credentials import get_credentials
+
+credentials = get_credentials()
+try:
+    keystone = ksclient.Client(**credentials)
+    print keystone.auth_url
+    #Looks like a potential bug
+    #if keystone.auth_url != keystone.management_url:
+    #    keystone.management_url = keystone.auth_url
+    tenant_name = 'user3-project'
+    tenant_exists = False
+
+    tenants_list = keystone.tenants.list()
+    for t in tenants_list:
+        if t.name ==  tenant_name:
+            tenant_exists = True
+    if tenant_exists :
+        print 'Tenant %s exists.' % tenant_name
+    else:
+        print 'Creating tenant %s ' % tenant_name
+        req_body = {
+            "tenant": {
+                "name": tenant_name,
+                "description": "Tenant  user3-project",
+                "enabled": True,
+                "extravalue01": "metadata01",
+            },
+        }
+        tenant = keystone.tenants.create(
+            req_body['tenant']['name'],
+            req_body['tenant']['description'],
+            req_body['tenant']['enabled']
+            )
+        print tenant
+
+finally:
+    print "Execution Completed."
+        </programlisting>
+	<para>
+	The following is the output of the script
+        </para>
+        <screen>
+		TBD
+	</screen> 
+    </section>
+
+</chapter>
