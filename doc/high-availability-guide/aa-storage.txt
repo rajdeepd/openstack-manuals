@@ -1,6 +1,0 @@
-[[ha-aa-storage]]
-=== Storage Backends for OpenStack Image and Cinder
-
-(Coming soon)
-
-

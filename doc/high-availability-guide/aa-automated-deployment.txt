@@ -1,4 +1,0 @@
-[[ha-aa-automated-deployment]]
-=== Automating Deployment with Puppet
-
-(Coming soon)
