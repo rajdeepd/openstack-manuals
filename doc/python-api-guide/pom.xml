@@ -36,7 +36,7 @@
                             <!-- These parameters only apply to webhelp -->
                             <enableDisqus>${comments.enabled}</enableDisqus>
                             <disqusShortname>python-api-guide</disqusShortname>
-                            <enableGoogleAnalytics>1</enableGoogleAnalytics>
+                            <enableGoogleAnalytics>0</enableGoogleAnalytics>
                             <googleAnalyticsId>UA-17511903-1</googleAnalyticsId>
                             <generateToc>
                                 appendix  toc,title
