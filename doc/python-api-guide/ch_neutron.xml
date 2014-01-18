@@ -7,9 +7,143 @@
         <?dbhtml stop-chunking?>
     <para>Coming Soon..
         </para>
-    <section xml:id="network">
-        <title>Network</title>
+
+        <section xml:id="create_network">
+            <title>Create Network</title>
         <para>
-            TBD</para>
+                The following program creates the Network</para>
+        <programlisting language="python">
+from neutronclient.v2_0 import client
+from credentials import get_credentials
+from utils import print_networks
+
+network_name="sample_network"
+credentials = get_credentials()
+neutron = client.Client(**credentials)
+try:
+    body_sample = {
+        "network":
+        {
+           "name": network_name,
+           "admin_state_up": True
+        }
+       }
+    netw = neutron.create_network(body=body_sample)
+    net_dict = netw['network']
+    network_id = net_dict['id']
+    print "Network %s created" % network_id
+
+    body_create_subnet = {
+      "subnets":[
+          {
+             "cidr":"192.168.199.0/24",
+             "ip_version":4,
+             "network_id": network_id
+          }
+      ]
+    }
+
+    subnet = neutron.create_subnet(body=body_create_subnet)
+    print "Created subnet %s" % subnet
+finally:
+    print "Execution completed"
+    #neutron.delete_network(network_id)
+    #print "Deleted Network %s" %network_id
+
+        </programlisting>
     </section>
+
+
+        <section xml:id="list_networks">
+            <title>List Networks</title>
+        <para>
+                The following program lists the Networks</para>
+        <programlisting language="python">
+from neutronclient.v2_0 import client
+from credentials import get_credentials
+from utils import print_values
+
+
+credentials = get_credentials()
+neutron = client.Client(**credentials)
+netw = neutron.list_networks()
+
+print_values(netw, 'networks')
+        </programlisting>
+    </section>
+
+
+        <section xml:id="create_port">
+            <title>Create Port</title>
+        <para>
+                The following program creates a port</para>
+        <programlisting language="python">
+from neutronclient.v2_0 import client
+import novaclient.v1_1.client as nvclient
+from credentials import get_credentials
+from utils import print_values_server
+from credentials import get_nova_credentials
+
+credentials = get_nova_credentials()
+nova_client = nvclient.Client(**credentials)
+
+#replace with server_id and network_id from your environment
+
+server_id='9a52795a-a70d-49a8-a5d0-5b38d78bd12d'
+network_id= 'ce5d204a-93f5-43ef-bd89-3ab99ad09a9a'
+server_detail = nova_client.servers.get(server_id)
+print server_detail.id
+
+if server_detail != None:
+    credentials = get_credentials()
+    neutron = client.Client(**credentials)
+
+    body_value = {
+                     "port": {
+                             "admin_state_up": True,
+                             "device_id": server_id,
+                             "name": "port1",
+                             "network_id": network_id
+                      }
+                 }
+    response = neutron.create_port(body=body_value)
+    print response
+        </programlisting>
+    </section>
+
+        <section xml:id="list_ports">
+            <title>List Ports</title>
+        <para>
+                The following program lists the ports</para>
+        <programlisting language="python">
+from neutronclient.v2_0 import client
+from credentials import get_credentials
+from utils import print_values
+
+
+credentials = get_credentials()
+neutron = client.Client(**credentials)
+ports = neutron.list_ports()
+print print_values(ports, 'ports')
+        </programlisting>
+    </section>
+
+        <section xml:id="list_server_ports">
+            <title>List Server Ports</title>
+        <para>
+                The following program lists the ports of a server</para>
+        <programlisting language="python">
+from neutronclient.v2_0 import client
+from credentials import get_credentials
+from utils import print_values
+
+
+credentials = get_credentials()
+neutron = client.Client(**credentials)
+ports = neutron.list_ports()
+print print_values(ports, 'ports')
+
+        </programlisting>
+    </section>
+
 </chapter>

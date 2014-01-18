@@ -5,11 +5,44 @@
     xml:id="ch_creating_images_automatically">
     <title>Nova</title>
     <?dbhtml stop-chunking?>
-    <para>There are several tools that are designed to automate image
-        creation.</para>
-    <section xml:id="oz">
-        <title>Oz</title>
-        <para>Coming Soon..
-        </para>
+        <section xml:id="list_servers">
+            <title>List Servers</title>
+        <para>
+                The following program Lists the Virtual Machines</para>
+        <programlisting language="python">
+from credentials import get_nova_credentials_v2
+from novaclient.client import Client
+
+credentials = get_nova_credentials_v2()
+nova_client = Client(**credentials)
+
+print nova_client.servers.list()
+
+        </programlisting>
     </section>
+
+        <section xml:id="create_server">
+            <title>Create Server</title>
+        <para>
+                The following program creates the server</para>
+        <programlisting language="python">
+import time
+from credentials import get_nova_credentials_v2
+from novaclient.client import Client
+
+credentials = get_nova_credentials_v2()
+nova_client = Client(**credentials)
+
+image = nova_client.images.find(name="cirros")
+flavor = nova_client.flavors.find(name="m1.tiny")
+instance = nova_client.servers.create(name="vm2", image=image,
+                                      flavor=flavor, key_name="keypair")
+print "Sleeping for 5s after create command"
+time.sleep(5)
+print "List of VMs"
+print nova_client.servers.list()
+
+        </programlisting>
+    </section>
+
 </chapter>

@@ -3,9 +3,23 @@
     xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="ch_converting">
     <title>Cinder</title>
     <para>Converting images from one format to another is generally straightforward.</para>
-    <section xml:id="cinder">
-        <title>Cinder</title>
+        <section xml:id="list_volumes">
+            <title>List Volumes</title>
         <para>
-            TBD</para>
+                The following program Lists the Volumes</para>
+        <programlisting language="python">
+import os
+from cinderclient.v2 import client
+from credentials import get_cinder_credentials
+
+credentials = get_cinder_credentials()
+try:
+    cinder_client = client.Client(*credentials, service_type="volume")
+    vol_list = cinder_client.volumes.list()
+    for v in vol_list:
+        print v
+finally:
+    print "Execution Completed"
+        </programlisting>
     </section>
 </chapter>
