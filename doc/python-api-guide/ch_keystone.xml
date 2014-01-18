@@ -33,12 +33,6 @@ try:
             break
 finally:
     print "Execution Completed." </programlisting>
-	<para>
-	The following is the output of the script
-        </para>
-        <screen>
-		TBD
-	</screen> 
         </section>
 
         <section xml:id="create_role">
@@ -73,12 +67,6 @@ try:
 finally:
     print "Execution Completed."
         </programlisting>
-	<para>
-	The following is the output of the script
-        </para>
-        <screen>
-		TBD
-	</screen> 
     </section>
 
         <section xml:id="list_tenants">
@@ -104,12 +92,6 @@ try:
 finally:
     print "Execution Completed."
         </programlisting>
-	<para>
-	The following is the output of the script
-        </para>
-        <screen>
-		TBD
-	</screen> 
     </section>
 
         <section xml:id="create_tenant">
@@ -156,12 +138,72 @@ try:
 finally:
     print "Execution Completed."
         </programlisting>
-	<para>
-	The following is the output of the script
-        </para>
-        <screen>
-		TBD
-	</screen> 
+    </section>
+
+        <section xml:id="list_users">
+            <title>List Users</title>
+        <para>
+                The following program lists the users</para>
+        <programlisting language="python">
+import keystoneclient.v2_0.client as ksclient
+from credentials import get_credentials
+
+credentials = get_credentials()
+try:
+    keystone = ksclient.Client(**credentials)
+    print keystone.auth_url
+
+    users_list = keystone.users.list()
+    for u in users_list:
+        print u
+
+finally:
+    print "Execution Completed."
+
+        </programlisting>
+    </section>
+
+        <section xml:id="create_user">
+            <title>Create User</title>
+        <para>
+                The following program creates a user</para>
+        <programlisting language="python">
+import keystoneclient.v2_0.client as ksclient
+from credentials import get_credentials
+
+credentials = get_credentials()
+try:
+    user_name = "test-user"
+    keystone = ksclient.Client(**credentials)
+    #Please make sure tenant_id is valid
+    tenant_id = 'e32aa814fe95471db493d7fcfc818583'
+    req_body = {
+        "user": {
+            "name": user_name,
+            "password": "test-user",
+            "tenantId": tenant_id,
+            "enabled": True,
+            "email": None
+        }
+    }
+    user_list = keystone.users.list()
+    user_exists = False
+    for u in user_list:
+        if u.name == user_name:
+            print "%s already exists" % u.name
+            user_exists = True
+            break
+    if not(user_exists):
+        user = keystone.users.create(req_body['user']['name'],
+                                     req_body['user']['password'],
+                                     email=req_body['user']['email'],
+                                     tenant_id=req_body['user']['tenantId'],
+                                     enabled=req_body['user']['enabled'])
+        print "User created %s" % user
+finally:
+    print "Execution Completed."
+
+        </programlisting>
     </section>
 
 </chapter>
