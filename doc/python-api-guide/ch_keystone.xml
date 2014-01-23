@@ -2,7 +2,7 @@
 <chapter xmlns="http://docbook.org/ns/docbook"
     xmlns:xi="http://www.w3.org/2001/XInclude"
     xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0"
-    xml:id="ch_obtaining_images">
+    xml:id="ch_keystone">
         <title>Keystone</title>
         <?dbhtml stop-chunking?>
     <para>The simplest way to use Openstack API samples is to run on the same machine 

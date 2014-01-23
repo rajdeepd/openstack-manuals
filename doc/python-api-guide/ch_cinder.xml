@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude"
-    xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="ch_converting">
+    xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="ch_cinder">
     <title>Cinder</title>
+    <?dbhtml stop-chunking?>
     <para>Converting images from one format to another is generally straightforward.</para>
         <section xml:id="list_volumes">
             <title>List Volumes</title>
@@ -20,6 +21,70 @@ try:
         print v
 finally:
     print "Execution Completed"
+        </programlisting>
+    </section>
+
+        <section xml:id="create_volume">
+            <title>Create Volume</title>
+        <para>
+                The following program creates the Volume</para>
+        <programlisting language="python">
+from cinderclient.v1 import client
+from credentials import get_cinder_credentials
+
+credentials = get_cinder_credentials()
+
+try:
+    cinder_client = client.Client(*credentials, service_type="volume")
+    vol_list = cinder_client.volumes.list()
+
+    vol_name = "voltest2"
+    vol_type = "test"
+    vol_size = 1
+    vol_exists = False
+    for v in vol_list:
+        if v == vol_name:
+            print "volume %s exists" % vol_name
+            vol_exists = True
+
+    if vol_exists == False:
+        volume = cinder_client.volumes.create(1, display_name=vol_name,
+                                             volume_type=vol_type)
+        print volume
+finally:
+    print "Execution completed"
+        </programlisting>
+    </section>
+
+        <section xml:id="create_volume_v2">
+            <title>Create Volume (V2 API)</title>
+        <para>
+                The following program creates the Volume using version 2.0 of the api</para>
+        <programlisting language="python">
+import sys
+import os
+from cinderclient.v2 import client
+from credentials import get_cinder_credentials
+
+credentials = get_cinder_credentials()
+try:
+    cinder_client = client.Client(*credentials, service_type="volume")
+    vol_list = cinder_client.volumes.list()
+
+    vol_name = sys.argv[1]
+    vol_type = sys.argv[2]
+    vol_size = sys.argv[3]
+    vol_exists = False
+    for v in vol_list:
+        if v == vol_name:
+            print "volume %s exists" % vol_name
+            vol_exists = True
+    if vol_exists == False:
+        volume = cinder_client.volumes.create(vol_size, name=vol_name,
+                 volume_type=vol_type)
+        print volume
+finally:
+    print "Execution completed"
         </programlisting>
     </section>
 </chapter>
