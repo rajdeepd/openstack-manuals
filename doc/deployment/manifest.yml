@@ -1,6 +1,6 @@
 ---
 applications:
-- name: python-api-guide
+- name: python-api-guide-1
   framework: rack
   runtime: ruby19
   memory: 256M

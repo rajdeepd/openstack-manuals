@@ -5,12 +5,58 @@
     xml:id="ch_obtaining_images">
         <title>Keystone</title>
         <?dbhtml stop-chunking?>
-    <para>The simplest way to use Openstack API samples is to run on the same machine where openstack is installed.
+    <para>The simplest way to use Openstack API samples is to run on the same machine 
+        where openstack is installed.
         </para>
         <section xml:id="list_roles">
             <title>List Roles</title>
         <para>
-                The following program lists all the roles available in the OpenStack</para>
+        In this sample we will query Keystone to get list of Roles for a tenant.
+        </para>
+        <orderedlist>
+	<listitem>
+	<para>Import the following modules </para>
+        <programlisting language="python">
+import keystoneclient.v2_0.client as ksclient
+from credentials import get_credentials
+from credentials import get_credentials_tenant
+        </programlisting>
+	</listitem>
+	<listitem>
+	<para>Get Credentials</para>
+        <para>We will populate a dictionary and retrieve it using <literal><replaceable>
+        get_credentials()</replaceable></literal> method.</para>
+        <programlisting language="python">
+credentials = get_credentials()
+        </programlisting>
+	</listitem>
+	<listitem>
+	<para>Instantiate the client object <literal><replaceable>keystone</replaceable></literal> using the 
+        <literal><replaceable>credentials</replaceable></literal> dictionary object</para>
+        <programlisting language="python">
+keystone = ksclient.Client(**credentials)
+        </programlisting>
+	</listitem>
+	<listitem>
+	<para>Get Tenant List</para>
+        <programlisting language="python">
+keystone = ksclient.Client(**credentials)
+tenants_list = keystone.tenants.list()
+        </programlisting>
+	</listitem>
+        <listitem>
+	<para>Get List of Roles for each tenant</para>
+        <programlisting language="python">
+keystone_tenant = ksclient.Client(**credentials_tenant)
+roles = keystone_tenant.roles.list()
+for r in roles:
+    print r
+         </programlisting>
+	</listitem>
+	</orderedlist>
+        <para>
+            Complete Code Listing
+        </para>
         <programlisting language="python">
 import keystoneclient.v2_0.client as ksclient
 from credentials import get_credentials
