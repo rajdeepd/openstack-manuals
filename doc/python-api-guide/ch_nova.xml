@@ -52,4 +52,93 @@ finally:
         </programlisting>
     </section>
 
+
+
+
+    </section>
+
+        <section xml:id="delete-server">
+            <title>Delete Server</title>
+        <para>
+                The following program deletes the server</para>
+        <programlisting language="python">
+from credentials import get_nova_credentials_v2
+from novaclient.client import Client
+
+credentials = get_nova_credentials_v2()
+nova_client = Client(**credentials)
+
+servers_list = nova_client.servers.list()
+server_del = "vm1"
+server_exists = False
+
+for s in servers_list:
+    if s.name == server_del:
+        print "the server %s exists" % server_del
+        server_exists = True
+        break
+if not server_exists:
+    print "server %s doesnot exist" % server_del
+else:
+    nova_client.servers.delete(s)
+    print "deleting server............"
+    print "server %s deleted" % server_del
+
+
+        </programlisting>
+    </section>
+
+
+        <section xml:id="details-flavor">
+            <title>Details of specified Flavor</title>
+        <para>
+                The following prints the details of a specified flavor</para>
+        <programlisting language="python">
+from credentials import get_nova_credentials_v2
+from novaclient.client import Client
+
+credentials = get_nova_credentials_v2()
+nova_client = Client(**credentials)
+
+flavors_list = nova_client.flavors.list()
+flavor = "m1.tiny"
+flavor_exists = False
+
+for flav in flavors_list:
+    if flav.name == flavor:
+        print "flavor %s exists" % flavor
+        flavor_exists = True
+        break
+if not flavor_exists:
+    print "flavor %s doesnot exists" % flavor
+else:
+    print "flavor name:", flav.name
+    print "flavor RAM:", flav.ram
+    print "flavor vcpus:", flav.vcpus
+    print "flavor disk:", flav.disk
+    print "flavor id:", flav.id
+    print "flavor ephemeral:", flav.ephemeral
+    print "flavor factor:", flav.rxtx_factor
+                                            
+
+        </programlisting>
+    </section>
+
+
+        <section xml:id="list-flavors">
+            <title>Lists available flavors</title>
+        <para>
+                The following lists the available flavors</para>
+        <programlisting language="python">
+
+from credentials import get_nova_credentials_v2
+from novaclient.client import Client
+
+credentials = get_nova_credentials_v2()
+nova_client = Client(**credentials)
+
+print  nova_client.flavors.list()
+
+        </programlisting>
+    </section>
 </chapter>
