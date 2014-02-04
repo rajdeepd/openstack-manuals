@@ -147,7 +147,7 @@ print print_values(ports, 'ports')
     </section>
 
 
-        <section xml:id="create router-add port to subnet">
+        <section xml:id="create-router-add-port-to-subnet">
             <title>create router and add port to a subnet</title>
         <para>
                 The following program creates router and adds port to a subnet</para>
@@ -160,10 +160,7 @@ from credentials import get_nova_credentials
 
 credentials = get_nova_credentials()
 nova_client = nvclient.Client(**credentials)
-
-#replace with server_id and network_id from your environment
-
-router_id = '72cf1682-60a8-4890-b0ed-6bad7d9f5466'
+#replace with server_id and network_id from your environment router_id = '72cf1682-60a8-4890-b0ed-6bad7d9f5466'
 network_id = '81bf592a-9e3f-4f84-a839-ae87df188dc1'
 try:
     credentials = get_credentials()
