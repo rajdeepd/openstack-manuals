@@ -35,7 +35,7 @@ There is an example Cloud Foundry manifest.yml(.example) file - if you wish to u
 
 ###Build python-api-guide
 
-cd openstack-manuals/doc/pythin-api-guide
+cd openstack-manuals/doc/python-api-guide
 mvn clean generate-sources
 
 the target directory is created with the contents of the build
@@ -43,6 +43,8 @@ the target directory is created with the contents of the build
 ###Copy the target dir
 
 Copy the target/docbkx/webhelp/python-api-guide/* directory to openstack-manuals/deployment/python-api-guide/public
+cd openstack-manuals/doc/deployment
+cp -r ../python-api-guide/target/docbkx/webhelp/python-api-guide/* public/ 
 
 
 ###Login to cloud foundry

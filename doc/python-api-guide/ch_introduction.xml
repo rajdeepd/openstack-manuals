@@ -4,11 +4,58 @@
     xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0"
     xml:id="ch_introduction">
     <title>Introduction</title>
-    <para>Coming Soon...
-    </para>
-    <section xml:id="intro">
-        <title>Introduction</title>
+
+    <section xml:id="pre-requisites">
+        <title>Pre-requisites</title>
         <para>
-            TBD</para>
+        <procedure>
+            <step>
+                <para>
+                  Openstack Havana installed with Neutron Networking.
+                </para>
+            </step>
+            <step>
+                <para>
+		   Clone the samples using 
+                   <command> git clone https://github.com/rajdeepd/openstack-manuals.git </command>
+                </para>
+            </step>
+            <step>
+                <para>
+                  copy openstack_env.sh.template openstack_env.sh
+                  change the following variables to  suit to local environment
+                </para>
+		 <programlisting>
+export OS_USERNAME="admin"
+export OS_PASSWORD="password"
+export OS_TENANT_NAME="admin"
+export OS_AUTH_URL="http://IPADDRESS/v2.0"
+		 </programlisting>
+                <para>
+                  Change the IP Address to the IP address of the machine where Openstack is running.
+                  Change the username and password to Openstack admin and password supplied at the time of installing OpenStack
+                </para>
+            </step>
+            <step>
+                <para>
+                  Set the environment variables using the command
+		 <programlisting>
+                  source openstack_env.sh 
+		 </programlisting>
+                </para>
+            </step>
+
+            </procedure>
+        </para>
+    </section>
+
+    <section xml:id="running-the-samples">
+        <title>Running the samples</title>
+	<para>
+	 To run the existing samples, Run the following command from openstack/lab1 folder
+	 <programlisting>
+	    python -m novasamples.list_servers_v2
+	 </programlisting>
+	</para>
     </section>
 </chapter>
