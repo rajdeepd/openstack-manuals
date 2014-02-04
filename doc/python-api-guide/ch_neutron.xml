@@ -12,7 +12,7 @@
             <title>Create Network</title>
         <para>
                 The following program creates the Network</para>
-        <programlisting language="python">
+        <programlisting language=" python">
 from neutronclient.v2_0 import client
 from credentials import get_credentials
 from utils import print_networks
