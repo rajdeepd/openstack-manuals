@@ -146,4 +146,110 @@ print print_values(ports, 'ports')
         </programlisting>
     </section>
 
+
+        <section xml:id="create router-add port to subnet">
+            <title>create router and add port to a subnet</title>
+        <para>
+                The following program creates router and adds port to a subnet</para>
+        <programlisting language="python">
+from neutronclient.v2_0 import client
+import novaclient.v1_1.client as nvclient
+from credentials import get_credentials
+from utils import print_values_server
+from credentials import get_nova_credentials
+
+credentials = get_nova_credentials()
+nova_client = nvclient.Client(**credentials)
+
+#replace with server_id and network_id from your environment
+
+router_id = '72cf1682-60a8-4890-b0ed-6bad7d9f5466'
+network_id = '81bf592a-9e3f-4f84-a839-ae87df188dc1'
+try:
+    credentials = get_credentials()
+    neutron = client.Client(**credentials)
+    router = neutron.show_router(router_id)
+    print router
+    body_value = {
+        "port": {
+        "admin_state_up": True,
+        "device_id": router_id,
+        "name": "port1",
+        "network_id": network_id
+        }
+    }
+    response = neutron.create_port(body=body_value)
+    print response
+finally:
+    print "Execution Completed"
+
+        </programlisting>
+    </section>
+
+
+        <section xml:id="delete-network">
+            <title>Delete a network</title>
+        <para>
+                The following program deletes a network</para>
+        <programlisting language="python">
+from neutronclient.v2_0 import client
+from credentials import get_credentials
+
+network_name = "temp_network"
+credentials = get_credentials()
+neutron = client.Client(**credentials)
+try:
+    body_sample = {
+        "network":
+        {
+            "name": network_name,
+            "admin_state_up": True
+        }
+                }
+    netw = neutron.create_network(body=body_sample)
+    net_dict = netw['network']
+    network_id = net_dict['id']
+    print "Network %s created" % network_id
+
+    body_create_subnet = {
+        "subnets": [
+            {
+                "cidr": "192.168.199.0/24",
+                "ip_version": 4,
+                "network_id": network_id
+            }
+                ]
+    }
+
+    subnet = neutron.create_subnet(body=body_create_subnet)
+    print "Created subnet %s" % subnet
+
+    neutron.delete_network(network_id)
+    print "Deleted Network %s" % network_id
+finally:
+    print "Execution completed"
+
+        </programlisting>
+    </section>
+
+
+        <section xml:id="list_routers">
+            <title>List routers</title>
+        <para>
+                The following lists all the routers</para>
+        <programlisting language="python">
+from neutronclient.v2_0 import client
+from credentials import get_credentials
+from utils import print_values
+
+try:
+    credentials = get_credentials()
+    neutron = client.Client(**credentials)
+    routers_list = neutron.list_routers(retrieve_all=True)
+    print_values(routers_list, 'routers')
+finally:
+    print 'Execution Completed'
+
+        </programlisting>
+    </section>
 </chapter>
