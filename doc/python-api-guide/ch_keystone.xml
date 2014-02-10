@@ -29,6 +29,30 @@ from credentials import get_credentials_tenant
         <programlisting language="python">
 credentials = get_credentials()
         </programlisting>
+        <para>
+        <literal><replaceable>get_credentials()</replaceable></literal> code is 
+        available in <literal><replaceable>credentials.py</replaceable></literal> and is listed below.
+        </para>
+        <programlisting language="python">
+def get_credentials():
+    d = {}
+    d['username'] = os.environ['OS_USERNAME']
+    d['password'] = os.environ['OS_PASSWORD']
+    d['auth_url'] = os.environ['OS_AUTH_URL']
+    d['tenant_name'] = os.environ['OS_TENANT_NAME']
+    return d
+        </programlisting>
+        <!--<literal><replaceable>get_credentials()</replaceable></literal> code is 
+        available in <literal><replaceable>credentials.py</replaceable></literal> and is listed below.
+	<programlisting language="python">
+def get_credentials():
+    d = {}
+    d['username'] = os.environ['OS_USERNAME']
+    d['password'] = os.environ['OS_PASSWORD']
+    d['auth_url'] = os.environ['OS_AUTH_URL']
+    d['tenant_name'] = os.environ['OS_TENANT_NAME']
+    return d
+        </programlisting>-->
 	</listitem>
 	<listitem>
 	<para>Instantiate the client object <literal><replaceable>keystone</replaceable></literal> using the 
