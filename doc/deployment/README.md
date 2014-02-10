@@ -43,8 +43,11 @@ the target directory is created with the contents of the build
 ###Copy the target dir
 
 Copy the target/docbkx/webhelp/python-api-guide/* directory to openstack-manuals/deployment/python-api-guide/public
+
+```bash
 cd openstack-manuals/doc/deployment
 cp -r ../python-api-guide/target/docbkx/webhelp/python-api-guide/* public/ 
+```
 
 
 ###Login to cloud foundry
