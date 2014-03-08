@@ -108,7 +108,82 @@ finally:
         <section xml:id="create_role">
             <title>Create Role</title>
         <para>
-                The following program creates a role.</para>
+In this sample we will query Keystone to create role for a tenant.
+        </para>
+        <orderedlist>
+        <listitem>
+        <para>Import the following modules </para>
+        <programlisting language="python">
+import keystoneclient.v2_0.client as ksclient
+from credentials import get_credentials
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Get Credentials</para>
+        <para>We will populate a dictionary and retrieve it using <literal><replaceable>
+        get_credentials()</replaceable></literal> method.</para>
+        <programlisting language="python">
+credentials = get_credentials()
+        </programlisting>
+        <para>
+        <literal><replaceable>get_credentials()</replaceable></literal> code is
+        available in <literal><replaceable>credentials.py</replaceable></literal> and is listed below.
+        </para>
+        <programlisting language="python">
+def get_credentials():
+    d = {}
+    d['username'] = os.environ['OS_USERNAME']
+    d['password'] = os.environ['OS_PASSWORD']
+    d['auth_url'] = os.environ['OS_AUTH_URL']
+    d['tenant_name'] = os.environ['OS_TENANT_NAME']
+    return d
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Instantiate the client object <literal><replaceable>keystone</replaceable></literal> using the
+        <literal><replaceable>credentials</replaceable></literal> dictionary object</para>
+        <programlisting language="python">
+keystone = ksclient.Client(**credentials)
+print keystone.auth_url
+#Looks like a potential bug
+if keystone.auth_url != keystone.management_url:
+    keystone.management_url = keystone.auth_url
+
+role_name = "role1"
+role_exists = False
+
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Get roles List</para>
+        <programlisting language="python">
+roles = keystone.roles.list()
+        </programlisting>
+        </listitem>
+
+        <listitem>
+        <para>check whether role exists and create a new role</para>
+        <programlisting language="python">
+for r in roles:
+    if r.name == role_name:
+        role_exists = True
+
+if role_exists:
+    print "%s already exists" % role_name
+else:
+    user_role = keystone.roles.create(role_name)
+    print "Created role %s" % role_name
+finally:
+    print "Execution Completed."
+
+        </programlisting>
+        </listitem>
+        </orderedlist>
+
+        
+        <para>
+            Complete Code Listing
+        </para>
         <programlisting language="python">
 import keystoneclient.v2_0.client as ksclient
 from credentials import get_credentials
@@ -136,13 +211,72 @@ try:
         print "Created role %s" % role_name
 finally:
     print "Execution Completed."
+
         </programlisting>
-    </section>
+       
+
+        </section>
 
         <section xml:id="list_tenants">
             <title>List Tenants</title>
         <para>
-                The following program lists all the tenants</para>
+In this sample we will query Keystone to list tenants.
+        </para> 
+        <orderedlist>
+        <listitem>
+        <para>Import the following modules </para>
+        <programlisting language="python">
+import keystoneclient.v2_0.client as ksclient
+from credentials import get_credentials 
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Get Credentials</para>
+        <para>We will populate a dictionary and retrieve it using <literal><replaceable>
+        get_credentials()</replaceable></literal> method.</para>
+        <programlisting language="python">
+credentials = get_credentials()
+        </programlisting>
+        <para>
+        <literal><replaceable>get_credentials()</replaceable></literal> code is
+        available in <literal><replaceable>credentials.py</replaceable></literal> and is listed below.
+        </para>
+        <programlisting language="python">
+def get_credentials():
+    d = {}
+    d['username'] = os.environ['OS_USERNAME']
+    d['password'] = os.environ['OS_PASSWORD']
+    d['auth_url'] = os.environ['OS_AUTH_URL']
+    d['tenant_name'] = os.environ['OS_TENANT_NAME']
+    return d
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Instantiate the client object <literal><replaceable>keystone</replaceable></literal> using the
+        <literal><replaceable>credentials</replaceable></literal> dictionary object</para>
+        <programlisting language="python">
+keystone = ksclient.Client(**credentials)
+print keystone.auth_url
+#Looks like a potential bug
+if keystone.auth_url != keystone.management_url:
+    keystone.management_url = keystone.auth_url
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Get tenants List</para>
+        <programlisting language="python">
+tenants_list = keystone.tenants.list()
+for t in tenants_list:
+    print t
+finally:
+    print "Execution Completed."
+        </programlisting>
+        </listitem>
+        </orderedlist>
+        
+        <para>
+            Complete Code Listing
+        </para>
         <programlisting language="python">
 import keystoneclient.v2_0.client as ksclient
 from credentials import get_credentials
@@ -161,13 +295,100 @@ try:
 
 finally:
     print "Execution Completed."
-        </programlisting>
-    </section>
 
-        <section xml:id="create_tenant">
+        </programlisting>
+        </section>
+
+
+
+
+        <section xml:id="create-tenant">
             <title>Create Tenant</title>
         <para>
-                The following program creates a tenant</para>
+In this sample we will query Keystone to create tenant.
+        </para> 
+        <orderedlist>
+        <listitem>
+        <para>Import the following modules </para>
+        <programlisting language="python">
+import keystoneclient.v2_0.client as ksclient
+from credentials import get_credentials 
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Get Credentials</para>
+        <para>We will populate a dictionary and retrieve it using <literal><replaceable>
+        get_credentials()</replaceable></literal> method.</para>
+        <programlisting language="python">
+credentials = get_credentials()
+        </programlisting>
+        <para>
+        <literal><replaceable>get_credentials()</replaceable></literal> code is
+        available in <literal><replaceable>credentials.py</replaceable></literal> and is listed below.
+        </para>
+        <programlisting language="python">
+def get_credentials():
+    d = {}
+    d['username'] = os.environ['OS_USERNAME']
+    d['password'] = os.environ['OS_PASSWORD']
+    d['auth_url'] = os.environ['OS_AUTH_URL']
+    d['tenant_name'] = os.environ['OS_TENANT_NAME']
+    return d
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Instantiate the client object <literal><replaceable>keystone</replaceable></literal> using the
+        <literal><replaceable>credentials</replaceable></literal> dictionary object</para>
+        <programlisting language="python">
+keystone = ksclient.Client(**credentials)
+print keystone.auth_url
+#Looks like a potential bug
+if keystone.auth_url != keystone.management_url:
+    keystone.management_url = keystone.auth_url
+    tenant_name = 'user3-project'
+    tenant_exists = False
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Get tenants List</para>
+        <programlisting language="python">
+tenants_list = keystone.tenants.list()
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>check if tenant exists and create a new tenant</para>
+        <programlisting language="python">
+for t in tenants_list:
+    if t.name ==  tenant_name:
+        tenant_exists = True
+if tenant_exists :
+    print 'Tenant %s exists.' % tenant_name
+else:
+    print 'Creating tenant %s ' % tenant_name
+    req_body = {
+        "tenant": {
+            "name": tenant_name,
+            "description": "Tenant  user3-project",
+            "enabled": True,
+            "extravalue01": "metadata01",
+        },
+    }
+    tenant = keystone.tenants.create(
+        req_body['tenant']['name'],
+        req_body['tenant']['description'],
+        req_body['tenant']['enabled']
+        )
+    print tenant
+
+finally:
+    print "Execution Completed."
+        </programlisting>
+        </listitem>
+        </orderedlist>
+
+        <para>
+            Complete Code Listing
+        </para>
         <programlisting language="python">
 import keystoneclient.v2_0.client as ksclient
 from credentials import get_credentials
@@ -184,9 +405,9 @@ try:
 
     tenants_list = keystone.tenants.list()
     for t in tenants_list:
-        if t.name ==  tenant_name:
+        if t.name == tenant_name:
             tenant_exists = True
-    if tenant_exists :
+    if tenant_exists:
         print 'Tenant %s exists.' % tenant_name
     else:
         print 'Creating tenant %s ' % tenant_name
@@ -201,19 +422,73 @@ try:
         tenant = keystone.tenants.create(
             req_body['tenant']['name'],
             req_body['tenant']['description'],
-            req_body['tenant']['enabled']
-            )
+            req_body['tenant']['enabled'])
         print tenant
 
 finally:
     print "Execution Completed."
+
         </programlisting>
-    </section>
+        </section>
 
         <section xml:id="list_users">
             <title>List Users</title>
         <para>
-                The following program lists the users</para>
+In this sample we will query Keystone to list users.
+        </para>
+        <orderedlist>
+        <listitem>
+        <para>Import the following modules </para>
+        <programlisting language="python">
+import keystoneclient.v2_0.client as ksclient
+from credentials import get_credentials
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Get Credentials</para>
+        <para>We will populate a dictionary and retrieve it using <literal><replaceable>
+        get_credentials()</replaceable></literal> method.</para>
+        <programlisting language="python">
+credentials = get_credentials()
+        </programlisting>
+        <para>
+        <literal><replaceable>get_credentials()</replaceable></literal> code is
+        available in <literal><replaceable>credentials.py</replaceable></literal> and is listed below.
+        </para>
+        <programlisting language="python">
+def get_credentials():
+    d = {}
+    d['username'] = os.environ['OS_USERNAME']
+    d['password'] = os.environ['OS_PASSWORD']
+    d['auth_url'] = os.environ['OS_AUTH_URL']
+    d['tenant_name'] = os.environ['OS_TENANT_NAME']
+    return d
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Instantiate the client object <literal><replaceable>keystone</replaceable></literal> using the
+        <literal><replaceable>credentials</replaceable></literal> dictionary object</para>
+        <programlisting language="python">
+keystone = ksclient.Client(**credentials)
+print keystone.auth_url
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Get users list</para>
+        <programlisting language="python">
+users_list = keystone.users.list()
+for u in users_list:
+    print u
+
+finally:
+    print "Execution Completed."
+
+        </programlisting>
+        </listitem>
+        </orderedlist>
+        <para>
+            Complete Code Listing
+        </para>
         <programlisting language="python">
 import keystoneclient.v2_0.client as ksclient
 from credentials import get_credentials
@@ -230,13 +505,96 @@ try:
 finally:
     print "Execution Completed."
 
+
         </programlisting>
-    </section>
+        </section>                                          
 
         <section xml:id="create_user">
-            <title>Create User</title>
+            <title>create User</title>
         <para>
-                The following program creates a user</para>
+In this sample we will query Keystone to create user.
+        </para>
+        <orderedlist>
+        <listitem>
+        <para>Import the following modules </para>
+        <programlisting language="python">
+import keystoneclient.v2_0.client as ksclient
+from credentials import get_credentials
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Get Credentials</para>
+        <para>We will populate a dictionary and retrieve it using <literal><replaceable>
+        get_credentials()</replaceable></literal> method.</para>
+        <programlisting language="python">
+credentials = get_credentials()
+        </programlisting>
+        <para>
+        <literal><replaceable>get_credentials()</replaceable></literal> code is
+        available in <literal><replaceable>credentials.py</replaceable></literal> and is listed below.
+        </para>
+        <programlisting language="python">
+def get_credentials():
+    d = {}
+    d['username'] = os.environ['OS_USERNAME']
+    d['password'] = os.environ['OS_PASSWORD']
+    d['auth_url'] = os.environ['OS_AUTH_URL']
+    d['tenant_name'] = os.environ['OS_TENANT_NAME']
+    return d
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Instantiate the client object <literal><replaceable>keystone</replaceable></literal> using the
+        <literal><replaceable>credentials</replaceable></literal> dictionary object</para>
+        <programlisting language="python">
+try:
+    user_name = "test-user"
+    keystone = ksclient.Client(**credentials)
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>list users</para>
+        <programlisting language="python">
+    #Please make sure tenant_id is valid
+    tenant_id = 'cdf2cd92ed764200910f4f0d9de17ce5'
+    req_body = {
+        "user": {
+            "name": user_name,
+            "password": "test-user",
+            "tenantId": tenant_id,
+            "enabled": True,
+            "email": None
+        }
+    }
+    user_list = keystone.users.list()
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>check whether user exists and create a new user</para>
+        <programlisting language="python">
+    user_exists = False
+    for u in user_list:
+        if u.name == user_name:
+            print "%s already exists" % u.name
+            user_exists = True
+            break
+    if not(user_exists):
+        user = keystone.users.create(req_body['user']['name'],
+                                     req_body['user']['password'],
+                                     email=req_body['user']['email'],
+                                     tenant_id=req_body['user']['tenantId'],
+                                     enabled=req_body['user']['enabled'])
+        print "User created %s" % user
+except Exception as e:
+    print e
+finally:
+    print "Execution Completed."
+        </programlisting>
+        </listitem>
+        </orderedlist>
+        <para>
+            Complete Code Listing
+        </para>
         <programlisting language="python">
 import keystoneclient.v2_0.client as ksclient
 from credentials import get_credentials
@@ -246,7 +604,7 @@ try:
     user_name = "test-user"
     keystone = ksclient.Client(**credentials)
     #Please make sure tenant_id is valid
-    tenant_id = 'e32aa814fe95471db493d7fcfc818583'
+    tenant_id = 'cdf2cd92ed764200910f4f0d9de17ce5'
     req_body = {
         "user": {
             "name": user_name,
@@ -261,6 +619,7 @@ try:
     for u in user_list:
         if u.name == user_name:
             print "%s already exists" % u.name
+
             user_exists = True
             break
     if not(user_exists):
@@ -270,10 +629,13 @@ try:
                                      tenant_id=req_body['user']['tenantId'],
                                      enabled=req_body['user']['enabled'])
         print "User created %s" % user
+except Exception as e:
+    print e
 finally:
     print "Execution Completed."
 
         </programlisting>
-    </section>
+        </section>
 
 </chapter>
+

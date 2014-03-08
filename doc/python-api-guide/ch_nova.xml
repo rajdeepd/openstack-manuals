@@ -5,10 +5,58 @@
     xml:id="ch_creating_images_automatically">
     <title>Nova</title>
     <?dbhtml stop-chunking?>
-        <section xml:id="list_servers">
-            <title>List Servers</title>
+
+       <section xml:id="list_servers">
+            <title>List Servers </title>
         <para>
-                The following program Lists the Virtual Machines</para>
+        In this sample we will query nova to list all the servers.
+        </para>
+        <orderedlist>
+        <listitem>
+        <para>Import the following modules </para>
+        <programlisting language="python">
+from credentials import get_nova_credentials_v2
+from novaclient.client import Client
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Get Credentials</para>
+        <para>We will populate a dictionary and retrieve it using <literal><replaceable>
+        get_credentials()</replaceable></literal> method.</para>
+        <programlisting language="python">
+credentials = get_nova_credentials_v2()
+        </programlisting>
+        <para>
+        <literal><replaceable>get_credentials()</replaceable></literal> code is
+        available in <literal><replaceable>credentials.py</replaceable></literal> and is listed below.
+        </para>
+        <programlisting language="python">
+def get_credentials():
+    d = {}
+    d['username'] = os.environ['OS_USERNAME']
+    d['password'] = os.environ['OS_PASSWORD']
+    d['auth_url'] = os.environ['OS_AUTH_URL']
+    d['tenant_name'] = os.environ['OS_TENANT_NAME']
+    return d
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Instantiate the client object <literal><replaceable>nova_client</replaceable></literal> using the
+        <literal><replaceable>credentials</replaceable></literal> dictionary object</para>
+        <programlisting language="python">
+nova_client = Client(**credentials)
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>List the servers</para>
+        <programlisting language="python">
+print nova_client.servers.list()
+        </programlisting>
+        </listitem>
+        </orderedlist>
+        <para>
+            Complete Code Listing
+        </para>
         <programlisting language="python">
 from credentials import get_nova_credentials_v2
 from novaclient.client import Client
@@ -17,14 +65,71 @@ credentials = get_nova_credentials_v2()
 nova_client = Client(**credentials)
 
 print nova_client.servers.list()
+       </programlisting>
+       </section>
+
+        <section xml:id="create-server">
+            <title>Create Server </title>
+        <para>
+        In this sample we will query nova to list all the servers.
+        </para>
+        <orderedlist>
+        <listitem>
+        <para>Import the following modules </para>
+        <programlisting language="python">
+from credentials import get_nova_credentials_v2
+from novaclient.client import Client
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Get Credentials</para>
+        <para>We will populate a dictionary and retrieve it using <literal><replaceable>
+        get_credentials()</replaceable></literal> method.</para>
+        <programlisting language="python">
+credentials = get_nova_credentials_v2()
+        </programlisting>
+        <para>
+        <literal><replaceable>get_credentials()</replaceable></literal> code is
+        available in <literal><replaceable>credentials.py</replaceable></literal> and is listed below.
+        </para>
+        <programlisting language="python">
+def get_credentials():
+    d = {}
+    d['username'] = os.environ['OS_USERNAME']
+    d['password'] = os.environ['OS_PASSWORD']
+    d['auth_url'] = os.environ['OS_AUTH_URL']
+    d['tenant_name'] = os.environ['OS_TENANT_NAME']
+    return d
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Instantiate the client object <literal><replaceable>nova_client</replaceable></literal> using the
+        <literal><replaceable>credentials</replaceable></literal> dictionary object</para>
+        <programlisting language="python">
+nova_client = Client(**credentials)
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>create the server</para>
+        <programlisting language="python">
+image = nova_client.images.find(name="cirros")
+flavor = nova_client.flavors.find(name="m1.tiny")
+#net_id = '81bf592a-9e3f-4f84-a839-ae87df188dc1'
+net_id = 'd05a7729-4bcf-4149-9d8f-6a4764520a04'
+nic_d = [{'net-id': net_id}]
+instance = nova_client.servers.create(name="vm2", image=image,
+                               flavor=flavor, key_name="keypair-1", nics=nic_d)
+print "Sleeping for 5s after create command"
+time.sleep(5)
+print "List of VMs"
+print nova_client.servers.list()
 
         </programlisting>
-    </section>
-
-        <section xml:id="create_server">
-            <title>Create Server</title>
+        </listitem>
+        </orderedlist>
         <para>
-                The following program creates the server</para>
+            Complete Code Listing
+        </para>
         <programlisting language="python">
 import time
 from credentials import get_nova_credentials_v2
@@ -48,15 +153,80 @@ try:
 finally:
     print "Execution Completed"
 
-
-        </programlisting>
-    </section>
+       </programlisting>
+       </section>
 
 
         <section xml:id="delete-server">
-            <title>Delete Server</title>
+            <title>Delete Server </title>
         <para>
-                The following program deletes the server</para>
+        In this sample we will query nova to delete a server.
+        </para>
+        <orderedlist>
+        <listitem>
+        <para>Import the following modules </para>
+        <programlisting language="python">
+from credentials import get_nova_credentials_v2
+from novaclient.client import Client
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Get Credentials</para>
+        <para>We will populate a dictionary and retrieve it using <literal><replaceable>
+        get_credentials()</replaceable></literal> method.</para>
+        <programlisting language="python">
+credentials = get_nova_credentials_v2()
+        </programlisting>
+        <para>
+        <literal><replaceable>get_credentials()</replaceable></literal> code is
+        available in <literal><replaceable>credentials.py</replaceable></literal> and is listed below.
+        </para>
+        <programlisting language="python">
+def get_credentials():
+    d = {}
+    d['username'] = os.environ['OS_USERNAME']
+    d['password'] = os.environ['OS_PASSWORD']
+    d['auth_url'] = os.environ['OS_AUTH_URL']
+    d['tenant_name'] = os.environ['OS_TENANT_NAME']
+    return d
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Instantiate the client object <literal><replaceable>nova_client</replaceable></literal> using the
+        <literal><replaceable>credentials</replaceable></literal> dictionary object</para>
+        <programlisting language="python">
+nova_client = Client(**credentials)
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>List the servers</para>
+        <programlisting language="python">
+servers_list = nova_client.servers.list()
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>check if server exists and delete the server</para>
+        <programlisting language="python">
+server_del = "vm1"
+server_exists = False
+
+for s in servers_list:
+    if s.name == server_del:
+        print "the server %s exists" % server_del
+        server_exists = True
+        break
+if not server_exists:
+    print "server %s doesnot exist" % server_del
+else:
+    nova_client.servers.delete(s)
+    print "deleting server............"
+    print "server %s deleted" % server_del
+        </programlisting>
+        </listitem>
+        </orderedlist>
+        <para>
+            Complete Code Listing
+        </para>
         <programlisting language="python">
 from credentials import get_nova_credentials_v2
 from novaclient.client import Client
@@ -80,15 +250,83 @@ else:
     print "deleting server............"
     print "server %s deleted" % server_del
 
-
         </programlisting>
-    </section>
+        </section>
 
-
-        <section xml:id="details-flavor">
-            <title>Details of specified Flavor</title>
+        <section xml:id="details-falvor">
+            <title>Details of specified flavor </title>
         <para>
-                The following prints the details of a specified flavor</para>
+        In this sample we will query nova to get details of specified flavor.
+        </para>
+        <orderedlist>
+        <listitem>
+        <para>Import the following modules </para>
+        <programlisting language="python">
+from credentials import get_nova_credentials_v2
+from novaclient.client import Client
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Get Credentials</para>
+        <para>We will populate a dictionary and retrieve it using <literal><replaceable>
+        get_credentials()</replaceable></literal> method.</para>
+        <programlisting language="python">
+credentials = get_nova_credentials_v2()
+        </programlisting>
+        <para>
+        <literal><replaceable>get_credentials()</replaceable></literal> code is
+        available in <literal><replaceable>credentials.py</replaceable></literal> and is listed below.
+        </para>
+        <programlisting language="python">
+def get_credentials():
+    d = {}
+    d['username'] = os.environ['OS_USERNAME']
+    d['password'] = os.environ['OS_PASSWORD']
+    d['auth_url'] = os.environ['OS_AUTH_URL']
+    d['tenant_name'] = os.environ['OS_TENANT_NAME']
+    return d
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Instantiate the client object <literal><replaceable>nova_client</replaceable></literal> using the
+        <literal><replaceable>credentials</replaceable></literal> dictionary object</para>
+        <programlisting language="python">
+nova_client = Client(**credentials)
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>List the flavors</para>
+        <programlisting language="python">
+flavors_list = nova_client.flavors.list()
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>check if flavor exists and get the details of the flavor</para>
+        <programlisting language="python">
+flavor = "m1.tiny"
+flavor_exists = False
+
+for flav in flavors_list:
+    if flav.name == flavor:
+        print "flavor %s exists" % flavor
+        flavor_exists = True
+        break
+if not flavor_exists:
+    print "flavor %s doesnot exists" % flavor
+else:
+    print "flavor name:", flav.name
+    print "flavor RAM:", flav.ram
+    print "flavor vcpus:", flav.vcpus
+    print "flavor disk:", flav.disk
+    print "flavor id:", flav.id
+    print "flavor ephemeral:", flav.ephemeral
+    print "flavor factor:", flav.rxtx_factor
+        </programlisting>
+        </listitem>
+        </orderedlist>
+        <para>
+            Complete Code Listing
+        </para>
         <programlisting language="python">
 from credentials import get_nova_credentials_v2
 from novaclient.client import Client
@@ -115,18 +353,59 @@ else:
     print "flavor id:", flav.id
     print "flavor ephemeral:", flav.ephemeral
     print "flavor factor:", flav.rxtx_factor
-                                            
+
 
         </programlisting>
     </section>
 
 
-        <section xml:id="list-flavors">
-            <title>Lists available flavors</title>
-        <para>
-                The following lists the available flavors</para>
-        <programlisting language="python">
 
+
+
+        <section xml:id="list-flavors">
+            <title>List available flavors </title>
+        <para>
+        In this sample we will query nova to get list of available flavors.
+        </para>
+        <orderedlist>
+        <listitem>
+        <para>Import the following modules </para>
+        <programlisting language="python">
+from credentials import get_nova_credentials_v2
+from novaclient.client import Client
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Get Credentials</para>
+        <para>We will populate a dictionary and retrieve it using <literal><replaceable>
+        get_credentials()</replaceable></literal> method.</para>
+        <programlisting language="python">
+credentials = get_nova_credentials_v2()
+        </programlisting>
+        <para>
+        <literal><replaceable>get_credentials()</replaceable></literal> code is
+        available in <literal><replaceable>credentials.py</replaceable></literal> and is listed below.
+        </para>
+        <programlisting language="python">
+def get_credentials():
+    d = {}
+    d['username'] = os.environ['OS_USERNAME']
+    d['password'] = os.environ['OS_PASSWORD']
+    d['auth_url'] = os.environ['OS_AUTH_URL']
+    d['tenant_name'] = os.environ['OS_TENANT_NAME']
+    return d
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Instantiate the client object <literal><replaceable>nova_client</replaceable></literal> using the
+        <literal><replaceable>credentials</replaceable></literal> dictionary object</para>
+        <programlisting language="python">
+nova_client = Client(**credentials)
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>List the available flavors</para>
+        <programlisting language="python">
 from credentials import get_nova_credentials_v2
 from novaclient.client import Client
 
@@ -134,24 +413,73 @@ credentials = get_nova_credentials_v2()
 nova_client = Client(**credentials)
 
 print  nova_client.flavors.list()
-
         </programlisting>
-    </section>
-
-        <section xml:id="details-available-flavors">
-            <title>Details of available flavors</title>
+        </listitem>
+        </orderedlist>
         <para>
-                The following lists the details of all available flavors</para>
+            Complete Code Listing
+        </para>
         <programlisting language="python">
-
 from credentials import get_nova_credentials_v2
 from novaclient.client import Client
 
 credentials = get_nova_credentials_v2()
 nova_client = Client(**credentials)
+print  nova_client.flavors.list()
+        </programlisting>
+    </section>
 
+
+        <section xml:id="details-available-flavors">
+            <title>List details of all available flavors </title>
+        <para>
+        In this sample we will query nova to get list details  of all available flavors.
+        </para>
+        <orderedlist>
+        <listitem>
+        <para>Import the following modules </para>
+        <programlisting language="python">
+from credentials import get_nova_credentials_v2
+from novaclient.client import Client
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Get Credentials</para>
+        <para>We will populate a dictionary and retrieve it using <literal><replaceable>
+        get_credentials()</replaceable></literal> method.</para>
+        <programlisting language="python">
+credentials = get_nova_credentials_v2()
+        </programlisting>
+        <para>
+        <literal><replaceable>get_credentials()</replaceable></literal> code is
+        available in <literal><replaceable>credentials.py</replaceable></literal> and is listed below.
+        </para>
+        <programlisting language="python">
+def get_credentials():
+    d = {}
+    d['username'] = os.environ['OS_USERNAME']
+    d['password'] = os.environ['OS_PASSWORD']
+    d['auth_url'] = os.environ['OS_AUTH_URL']
+    d['tenant_name'] = os.environ['OS_TENANT_NAME']
+    return d
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Instantiate the client object <literal><replaceable>nova_client</replaceable></literal> using the
+        <literal><replaceable>credentials</replaceable></literal> dictionary object</para>
+        <programlisting language="python">
+nova_client = Client(**credentials)
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>List the available flavors</para>
+        <programlisting language="python">
 flavors_list = nova_client.flavors.list()
-
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>List details of all available flavors</para>
+        <programlisting language="python">
 for flav in flavors_list:
     print "flavor name:", flav.name
     print "flavor RAM:", flav.ram
@@ -163,5 +491,25 @@ for flav in flavors_list:
     print "\n"
 
         </programlisting>
-    </section>
+        </listitem>
+        </orderedlist>
+     
+        <para>complete code listing</para>
+        <programlisting language="python">
+from credentials import get_nova_credentials_v2
+from novaclient.client import Client
+credentials = get_nova_credentials_v2()
+nova_client = Client(**credentials)
+for flav in flavors_list:
+    print "flavor name:", flav.name
+    print "flavor RAM:", flav.ram
+    print "flavor vcpus:", flav.vcpus
+    print "flavor disk:", flav.disk
+    print "flavor id:", flav.id
+    print "flavor ephemeral:", flav.ephemeral
+    print "flavor factor:", flav.rxtx_factor
+    print "\n"
+        </programlisting>
+        </section>  
+
 </chapter>

@@ -4,10 +4,63 @@
     <title>Cinder</title>
     <?dbhtml stop-chunking?>
     <para>Converting images from one format to another is generally straightforward.</para>
-        <section xml:id="list_volumes">
-            <title>List Volumes</title>
+
+        <section xml:id="list-volumes">
+            <title>List Volumes </title>
         <para>
-                The following program Lists the Volumes</para>
+        In this sample we will query cinder to get list details  of all available flavors.
+        </para>
+        <orderedlist>
+        <listitem>  
+        <para>Import the following modules </para>
+        <programlisting language="python">
+import os
+from cinderclient.v2 import client
+from credentials import get_cinder_credentials
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Get Credentials</para>
+        <para>We will populate a dictionary and retrieve it using <literal><replaceable>
+        get_credentials()</replaceable></literal> method.</para>
+        <programlisting language="python">
+credentials = get_cinder_credentials
+        </programlisting>
+        <para>
+        <literal><replaceable>get_credentials()</replaceable></literal> code is
+        available in <literal><replaceable>credentials.py</replaceable></literal> and is listed below.
+        </para>
+        <programlisting language="python">
+def get_credentials():
+    d = {}
+    d['username'] = os.environ['OS_USERNAME']
+    d['password'] = os.environ['OS_PASSWORD']
+    d['auth_url'] = os.environ['OS_AUTH_URL']
+    d['tenant_name'] = os.environ['OS_TENANT_NAME']
+    return d
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Instantiate the client object <literal><replaceable>cinder_client</replaceable></literal> using the
+        <literal><replaceable>credentials</replaceable></literal> tuple object</para>
+        <programlisting language="python">
+cinder_client = client.Client(*credentials, service_type="volume")
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>List the volumes</para>
+        <programlisting language="python">
+vol_list = cinder_client.volumes.list()
+for v in vol_list:
+    print v
+print "Execution Completed"
+
+        </programlisting>
+        </listitem>
+           </orderedlist>
+        <para>
+            Complete Code Listing
+        </para>
         <programlisting language="python">
 import os
 from cinderclient.v2 import client
@@ -24,16 +77,92 @@ finally:
         </programlisting>
     </section>
 
-        <section xml:id="create_volume">
-            <title>Create Volume</title>
+
+        <section xml:id="create-volume">
+            <title>Create Volume </title>
         <para>
-                The following program creates the Volume</para>
+        In this sample we will query cinder to create a new volume
+        </para> 
+        <orderedlist>
+        <listitem>  
+        <para>Import the following modules </para>
         <programlisting language="python">
 from cinderclient.v1 import client
 from credentials import get_cinder_credentials
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Get Credentials</para>
+        <para>We will populate a dictionary and retrieve it using <literal><replaceable>
+        get_credentials()</replaceable></literal> method.</para>
+        <programlisting language="python">
+credentials = get_cinder_credentials
+        </programlisting>
+        <para>
+        <literal><replaceable>get_credentials()</replaceable></literal> code is
+        available in <literal><replaceable>credentials.py</replaceable></literal> and is listed below.
+        </para>
+        <programlisting language="python">
+def get_credentials():
+    d = {}
+    d['username'] = os.environ['OS_USERNAME']
+    d['password'] = os.environ['OS_PASSWORD']
+    d['auth_url'] = os.environ['OS_AUTH_URL']
+    d['tenant_name'] = os.environ['OS_TENANT_NAME']
+    return d
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Instantiate the client object <literal><replaceable>cinder_client</replaceable></literal> using the
+        <literal><replaceable>credentials</replaceable></literal> tuple object</para>
+        <programlisting language="python">
+cinder_client = client.Client(*credentials, service_type="volume")
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>List the volumes</para>
+        <programlisting language="python">
+vol_list = cinder_client.volumes.list()
+        </programlisting>
+        </listitem>
 
-credentials = get_cinder_credentials()
+        <listitem>
+        <para>check whether volume exists and create a new volume</para>
+        <programlisting language="python">
+vol_name = "voltest2"
+vol_type = "test"
+vol_size = 1
+vol_exists = False
+for v in vol_list:
+    if v == vol_name:
+        print "volume %s exists" % vol_name
+        vol_exists = True
 
+if vol_exists == False:
+    volume = cinder_client.volumes.create(1, display_name=vol_name,
+                                         volume_type=vol_type)
+    print volume
+vol_exists = False
+for v in vol_list:
+    if v == vol_name:
+        print "volume %s exists" % vol_name
+        vol_exists = True
+
+if vol_exists == False:
+    volume = cinder_client.volumes.create(1, display_name=vol_name,
+                                         volume_type=vol_type)
+    print volume
+
+print "Execution completed"
+        </programlisting>
+        </listitem>
+        </orderedlist>
+        
+        <para>complete code listing</para>
+        <programlisting language="python">
+from cinderclient.v1 import client
+from credentials import get_cinder_credentials
+credentials = get_cinder_credentials
 try:
     cinder_client = client.Client(*credentials, service_type="volume")
     vol_list = cinder_client.volumes.list()
@@ -53,13 +182,85 @@ try:
         print volume
 finally:
     print "Execution completed"
+
+
         </programlisting>
-    </section>
+        </section>
+
 
         <section xml:id="create_volume_v2">
-            <title>Create Volume (V2 API)</title>
+            <title>Create Volume (V2 API) </title>
         <para>
-                The following program creates the Volume using version 2.0 of the api</para>
+        In this sample we will query cinder to create a new volume.
+        </para> 
+        <orderedlist>
+        <listitem>
+        <para>Import the following modules </para>
+        <programlisting language="python">
+import sys
+import os
+from cinderclient.v2 import client
+from credentials import get_cinder_credentials
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Get Credentials</para>
+        <para>We will populate a dictionary and retrieve it using <literal><replaceable>
+        get_credentials()</replaceable></literal> method.</para>
+        <programlisting language="python">
+credentials = get_cinder_credentials
+        </programlisting>
+        <para>
+        <literal><replaceable>get_credentials()</replaceable></literal> code is
+        available in <literal><replaceable>credentials.py</replaceable></literal> and is listed below.
+        </para>
+        <programlisting language="python">
+def get_credentials():
+    d = {}
+    d['username'] = os.environ['OS_USERNAME']
+    d['password'] = os.environ['OS_PASSWORD']
+    d['auth_url'] = os.environ['OS_AUTH_URL']
+    d['tenant_name'] = os.environ['OS_TENANT_NAME']
+    return d
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Instantiate the client object <literal><replaceable>cinder_client</replaceable></literal> using the
+        <literal><replaceable>credentials</replaceable></literal> tuple object</para>
+        <programlisting language="python">
+cinder_client = client.Client(*credentials, service_type="volume")
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>List the volumes</para>
+        <programlisting language="python">
+vol_list = cinder_client.volumes.list()
+        </programlisting>
+        </listitem>
+
+<listitem>
+<para>check if volume exists and create a new volume</para>
+<programlisting language="python">
+vol_name = sys.argv[1]
+vol_type = sys.argv[2]
+vol_size = sys.argv[3]
+vol_exists = False
+for v in vol_list:
+    if v == vol_name:
+        print "volume %s exists" % vol_name
+        vol_exists = True
+if vol_exists == False:
+    volume = cinder_client.volumes.create(vol_size, name=vol_name,
+             volume_type=vol_type)
+    print volume
+
+print "Execution completed"
+           </programlisting>
+           </listitem>
+           </orderedlist>
+        <para>
+            Complete Code Listing
+        </para>
         <programlisting language="python">
 import sys
 import os
@@ -87,10 +288,88 @@ finally:
     print "Execution completed"
         </programlisting>
     </section>
-        <section xml:id="delete_volume">
-            <title>Delete Volume</title>
+
+
+
+
+
+
+
+
+
+       <section xml:id="delete_volume">
+            <title>Delete Volume </title>
         <para>
-                The following program deletes the Volume</para>
+        In this sample we will query cinder to delete a volume.
+        </para>
+        <orderedlist>
+        <listitem>
+        <para>Import the following modules </para>
+        <programlisting language="python">
+import sys
+from cinderclient.v1 import client
+from credentials import get_cinder_credentials
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Get Credentials</para>
+        <para>We will populate a dictionary and retrieve it using <literal><replaceable>
+        get_credentials()</replaceable></literal> method.</para>
+        <programlisting language="python">
+credentials = get_cinder_credentials
+        </programlisting>
+        <para>
+        <literal><replaceable>get_credentials()</replaceable></literal> code is
+        available in <literal><replaceable>credentials.py</replaceable></literal> and is listed below.
+        </para>
+        <programlisting language="python">
+def get_credentials():
+    d = {}
+    d['username'] = os.environ['OS_USERNAME']
+    d['password'] = os.environ['OS_PASSWORD']
+    d['auth_url'] = os.environ['OS_AUTH_URL']
+    d['tenant_name'] = os.environ['OS_TENANT_NAME']
+    return d
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>Instantiate the client object <literal><replaceable>cinder_client</replaceable></literal> using the
+        <literal><replaceable>credentials</replaceable></literal> tuple object</para>
+        <programlisting language="python">
+cinder_client = client.Client(*credentials, service_type="volume")
+        </programlisting>
+        </listitem>
+        <listitem>
+        <para>List the volumes</para>
+        <programlisting language="python">
+vol_list = cinder_client.volumes.list()
+        </programlisting>
+        </listitem>
+
+<listitem>
+<para>check if volume exists and delete the volume</para>
+<programlisting language="python">
+vol_del = sys.argv[1]
+vol_exists = False
+for v in vol_list:
+    if v.display_name == vol_del:
+        print "volume %s exists" % vol_del
+        vol_exists = True
+        break
+if not vol_exists:
+    print "volume %s doesnot exist" % vol_del
+else:
+    cinder_client.volumes.delete(v)
+    print "deleting volume..............."
+    print "volume %s deleted" % vol_del
+print "Execution completed"
+
+           </programlisting>
+           </listitem>
+           </orderedlist>
+        <para>
+            Complete Code Listing
+        </para>
         <programlisting language="python">
 import sys
 from cinderclient.v1 import client
@@ -115,6 +394,8 @@ try:
         print "volume %s deleted" % vol_del
 finally:
     print "Execution completed"
+
         </programlisting>
     </section>
+
 </chapter>
